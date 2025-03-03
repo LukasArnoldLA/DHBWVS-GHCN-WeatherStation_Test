@@ -27,7 +27,7 @@ jobs:
         with:
           context: .
           push: true
-          tage: ghcr.io/lukasarnoldla/myapp:latest
+          tags: ghcr.io/lukasarnoldla/myapp:latest
 
       # - name: 🔨 Docker Build
       #   run: |
