@@ -24,7 +24,7 @@ jobs:
 
       - name: 🔨 Docker Build
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/myapp:latest
+          IMAGE_NAME=ghcr.io/lukasarnoldla/myapp:latest
           echo "🛠️ Bauen des Docker-Images: $IMAGE_NAME"
           docker build -t $IMAGE_NAME .
 
