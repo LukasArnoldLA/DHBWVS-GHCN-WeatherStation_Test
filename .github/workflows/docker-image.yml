@@ -14,18 +14,6 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v4
 
-      - name: 🔨 Docker Build
-        run: |
-          IMAGE_NAME=ghcr.io/lukasarnoldla/myapp:latest
-          echo "🛠️ Bauen des Docker-Images: $IMAGE_NAME"
-          docker build -t $IMAGE_NAME .
-
-      # - name: 🔑 GitHub Container Registry Login (mit GITHUB_TOKEN)
-      #   run: |
-      #     echo "🔑 Versuche Login bei GHCR..."
-      #     echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      #     echo "✅ Login erfolgreich!"
-
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
@@ -33,8 +21,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🚀 Docker Image Tagging & Push
-        run: |
-          IMAGE_NAME=ghcr.io/lukasarnoldla/myapp:latest
-          echo "🚀 Pushe Docker-Image: $IMAGE_NAME"
-          docker push $IMAGE_NAME
+      - name: Build Docker image and push
+        id: docker_build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tage: ghcr.io/lukasarnoldla/myapp:latest
+
+      # - name: 🔨 Docker Build
+      #   run: |
+      #     IMAGE_NAME=ghcr.io/lukasarnoldla/myapp:latest
+      #     echo "🛠️ Bauen des Docker-Images: $IMAGE_NAME"
+      #     docker build -t $IMAGE_NAME .
+
+
+
+      # - name: 🚀 Docker Image Tagging & Push
+      #   run: |
+      #     IMAGE_NAME=ghcr.io/lukasarnoldla/myapp:latest
+      #     echo "🚀 Pushe Docker-Image: $IMAGE_NAME"
+      #     docker push $IMAGE_NAME
