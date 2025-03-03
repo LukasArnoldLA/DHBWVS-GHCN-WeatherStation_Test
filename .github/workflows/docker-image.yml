@@ -1,4 +1,4 @@
-name: Docker CI/CD mit GHCR (Debug-Modus
+name: Docker CI/CD mit GHCR (Debug-Modus)
 
 on:
   push:
