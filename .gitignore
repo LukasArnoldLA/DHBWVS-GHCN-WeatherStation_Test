@@ -1,0 +1,7 @@
+env
+*.env
+*.txt
+*.pyc
+data/ghcnd-inventory.txt
+env.txt
+data/ghcnd-stations.csv
