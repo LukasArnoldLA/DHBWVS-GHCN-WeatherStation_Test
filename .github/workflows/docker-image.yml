@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read  # Leserechte für den Code des Repos
+  packages: write  # Schreibrechte für die Container-Registry (GHCR)
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
