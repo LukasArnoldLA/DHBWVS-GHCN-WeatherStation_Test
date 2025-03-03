@@ -32,5 +32,3 @@ jobs:
           tags: |
             ghcr.io/lukasarnoldla/myapp:latest
             ghcr.io/lukasarnoldla/myapp:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
