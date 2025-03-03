@@ -1,18 +1,25 @@
-name: Docker Image CI
+name: Docker CI/CD mit GHCR (ohne PAT)
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main  # Läuft bei Änderungen im main-Branch
 
 jobs:
-
-  build:
-
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: 📥 Repository auschecken
+        uses: actions/checkout@v3
+
+      - name: 🔨 Docker Build
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/myapp:latest .
+
+      - name: 🔑 GitHub Container Registry Login (mit GITHUB_TOKEN)
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: 🚀 Docker Image Tagging & Push
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/myapp:latest
