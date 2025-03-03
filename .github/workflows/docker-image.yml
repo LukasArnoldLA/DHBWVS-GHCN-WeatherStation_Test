@@ -1,9 +1,9 @@
-name: Docker CI/CD mit GHCR (ohne PAT)
+name: Docker CI/CD mit GHCR (Debug-Modus)
 
 on:
   push:
     branches:
-      - main  # Läuft bei Änderungen im main-Branch
+      - main
 
 jobs:
   build-and-push:
@@ -13,13 +13,37 @@ jobs:
       - name: 📥 Repository auschecken
         uses: actions/checkout@v3
 
+      - name: Debug GitHub Repository Info
+        run: |
+          echo "🔍 GitHub Actor: ${{ github.actor }}"
+          echo "🔍 Repository Owner: ${{ github.repository_owner }}"
+          echo "🔍 Repository Name: ${{ github.repository }}"
+          echo "🔍 GitHub Token Länge: ${#secrets.GITHUB_TOKEN}"
+
       - name: 🔨 Docker Build
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}DHBWVS-GHCN-WeatherStation_Test:latest .
-
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/myapp:latest
+          echo "🛠️ Bauen des Docker-Images: $IMAGE_NAME"
+          docker build -t $IMAGE_NAME .
+      
       - name: 🔑 GitHub Container Registry Login (mit GITHUB_TOKEN)
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: |
+          echo "🔑 Versuche Login bei GHCR..."
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo "✅ Login erfolgreich!"
 
       - name: 🚀 Docker Image Tagging & Push
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/DHBWVS-GHCN-WeatherStation_Test:latest
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/myapp:latest
+          echo "🚀 Pushe Docker-Image: $IMAGE_NAME"
+          docker push $IMAGE_NAME
+
+      - name: Debug Docker Images Liste
+        run: docker images
+
+      - name: Debug Liste der GHCR-Pakete
+        run: |
+          echo "🔍 Überprüfe GHCR-Pakete für ${{ github.repository_owner }}..."
+          curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.v3+json" \
+               https://api.github.com/users/${{ github.repository_owner }}/packages?package_type=container | jq
