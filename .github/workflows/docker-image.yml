@@ -2,9 +2,11 @@ name: Docker CI/CD mit GHCR (Debug-Modus)
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build-and-push:
@@ -27,18 +29,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/lukasarnoldla/myapp:latest
-
-      # - name: 🔨 Docker Build
-      #   run: |
-      #     IMAGE_NAME=ghcr.io/lukasarnoldla/myapp:latest
-      #     echo "🛠️ Bauen des Docker-Images: $IMAGE_NAME"
-      #     docker build -t $IMAGE_NAME .
-
-
-
-      # - name: 🚀 Docker Image Tagging & Push
-      #   run: |
-      #     IMAGE_NAME=ghcr.io/lukasarnoldla/myapp:latest
-      #     echo "🚀 Pushe Docker-Image: $IMAGE_NAME"
-      #     docker push $IMAGE_NAME
+          tags: |
+            ghcr.io/lukasarnoldla/myapp:latest
+            ghcr.io/lukasarnoldla/myapp:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
