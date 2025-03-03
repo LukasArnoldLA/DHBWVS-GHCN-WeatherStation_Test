@@ -13,19 +13,21 @@ jobs:
       - name: 📥 Repository auschecken
         uses: actions/checkout@v3
 
-      - name: Debug GitHub Repository Info
+      - name: 🐛 Debug GitHub Repository Info
         run: |
           echo "🔍 GitHub Actor: ${{ github.actor }}"
           echo "🔍 Repository Owner: ${{ github.repository_owner }}"
           echo "🔍 Repository Name: ${{ github.repository }}"
-          echo "🔍 GitHub Token Länge: ${#secrets.GITHUB_TOKEN}"
+          echo "🔍 GitHub Token Länge: ${#GITHUB_TOKEN}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔨 Docker Build
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/myapp:latest
           echo "🛠️ Bauen des Docker-Images: $IMAGE_NAME"
           docker build -t $IMAGE_NAME .
-      
+
       - name: 🔑 GitHub Container Registry Login (mit GITHUB_TOKEN)
         run: |
           echo "🔑 Versuche Login bei GHCR..."
@@ -38,10 +40,10 @@ jobs:
           echo "🚀 Pushe Docker-Image: $IMAGE_NAME"
           docker push $IMAGE_NAME
 
-      - name: Debug Docker Images Liste
+      - name: 🛠️ Debug Docker Images Liste
         run: docker images
 
-      - name: Debug Liste der GHCR-Pakete
+      - name: 🛠️ Debug Liste der GHCR-Pakete
         run: |
           echo "🔍 Überprüfe GHCR-Pakete für ${{ github.repository_owner }}..."
           curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
