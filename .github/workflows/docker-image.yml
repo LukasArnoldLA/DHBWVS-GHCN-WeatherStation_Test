@@ -36,7 +36,7 @@ jobs:
 
       - name: 🚀 Docker Image Tagging & Push
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/myapp:latest
+          IMAGE_NAME=ghcr.io/lukasarnoldla/myapp:latest
           echo "🚀 Pushe Docker-Image: $IMAGE_NAME"
           docker push $IMAGE_NAME
 
