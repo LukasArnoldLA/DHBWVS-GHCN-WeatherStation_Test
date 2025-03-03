@@ -20,11 +20,18 @@ jobs:
           echo "🛠️ Bauen des Docker-Images: $IMAGE_NAME"
           docker build -t $IMAGE_NAME .
 
-      - name: 🔑 GitHub Container Registry Login (mit GITHUB_TOKEN)
-        run: |
-          echo "🔑 Versuche Login bei GHCR..."
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          echo "✅ Login erfolgreich!"
+      # - name: 🔑 GitHub Container Registry Login (mit GITHUB_TOKEN)
+      #   run: |
+      #     echo "🔑 Versuche Login bei GHCR..."
+      #     echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      #     echo "✅ Login erfolgreich!"
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🚀 Docker Image Tagging & Push
         run: |
