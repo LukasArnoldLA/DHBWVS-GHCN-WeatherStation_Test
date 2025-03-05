@@ -3,11 +3,9 @@ services:
     image: ghcr.io/lukasarnoldla/myapp:latest
     ports:
       - 5000:5000
-    volumes:
-      - .:/app
     environment:
       FLASK_DEBUG: 1
-    command: flask run -h 0.0.0.0
+    command: python app.py
   db:
     image: postgis/postgis:latest
     environment:
