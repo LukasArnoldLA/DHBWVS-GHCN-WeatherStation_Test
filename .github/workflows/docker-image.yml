@@ -12,6 +12,14 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
+    services:
+      db:
+        image: postgis/postgis:latest
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: secretpassword
+          POSTGRES_DB: dhbwvsghcn
+
     steps:
       - name: Checkout the files
         uses: actions/checkout@v4
