@@ -37,16 +37,30 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Wait for PostgreSQL to be ready
+      - name: Debug PostgreSQL
         run: |
-          until pg_isready -h localhost -p 5432 -U admin; do
-            echo "Waiting for database..."
+          echo "Liste aller laufenden Container:"
+          docker ps -a
+          echo "PostgreSQL Status prüfen:"
+          pg_isready -h localhost -p 5432 -U admin || echo "Database not ready"
+
+      - name: Warten auf PostgreSQL
+        run: |
+          echo "Warten auf PostgreSQL..."
+          for i in {1..60}; do
+            if pg_isready -h localhost -p 5432 -U admin; then
+              echo "PostgreSQL ist bereit!"
+              exit 0
+            fi
+            echo "Warten... ($i)"
             sleep 2
           done
+          echo "Fehler: PostgreSQL wurde nicht rechtzeitig bereit."
+          exit 1
 
       - name: Run tests
         env:
-          DATABASE_URL: postgresql://admin:secret@localhost:5432/dhbwvsghcn
+          DATABASE_URL: postgresql://admin:secretpassword@localhost:5432/dhbwvsghcn
         run: pytest test_app.py -v
 
       - name: Log in to the Container registry
