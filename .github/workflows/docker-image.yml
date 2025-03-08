@@ -32,7 +32,16 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -p 5432 -U admin; do
+            echo "Waiting for database..."
+            sleep 2
+          done
+
       - name: Run tests
+        env:
+          DATABASE_URL: postgresql://admin:secret@localhost:5432/dhbwvsghcn
         run: pytest test_app.py -v
 
       - name: Log in to the Container registry
