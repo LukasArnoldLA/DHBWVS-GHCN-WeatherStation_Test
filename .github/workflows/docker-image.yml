@@ -19,6 +19,11 @@ jobs:
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: secretpassword
           POSTGRES_DB: dhbwvsghcn
+          options: >-
+            --health-cmd "pg_isready -U admin -d dhbwvsghcn"
+            --health-interval=5s
+            --health-timeout=5s
+            --health-retries=5
 
     steps:
       - name: Checkout the files
