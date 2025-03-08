@@ -16,7 +16,7 @@ app = Flask(__name__)
 #Klasse zum Erstellen und automatisch beenden Connection
 class DatabaseConnection:
     def __enter__(self):
-        self.connection = psycopg2.connect(database="dhbwvsghcn", user="admin", password="secretpassword", host="db", port=5432)
+        self.connection = psycopg2.connect(database="dhbwvsghcn", user="admin", password="secretpassword", host="localhost", port=5432)
         self.cursor = self.connection.cursor()
         return self.cursor
     
