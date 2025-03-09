@@ -9,14 +9,13 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  test-build-and-push:
     runs-on: ubuntu-latest
 
     services:
       db:
         image: postgis/postgis:latest
         env:
-          POSTGRES_HOST: localhost
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: secretpassword
           POSTGRES_DB: dhbwvsghcn
