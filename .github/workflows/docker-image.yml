@@ -61,10 +61,6 @@ jobs:
           echo "Fehler: PostgreSQL wurde nicht rechtzeitig bereit."
           exit 1
 
-      - name: Zeige PostgreSQL-Logs  # Hier werden die Logs von PostgreSQL ausgegeben
-        run: |
-          docker logs $(docker ps -q --filter "ancestor=postgres:15")
-
       - name: Run tests
         env:
           DATABASE_URL: postgresql://admin:secretpassword@localhost:5432/dhbwvsghcn
